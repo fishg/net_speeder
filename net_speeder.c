@@ -38,7 +38,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	static int count = 0;                  
 	struct libnet_ipv4_hdr *ip;              
 	count++;
-	if( count%3 !=0){
+	// if( count%3 !=0){
 		libnet_t *libnet_handler = (libnet_t *)args;
 		
 		ip = (struct libnet_ipv4_hdr*)(packet + ETHERNET_H_LEN);
@@ -54,9 +54,9 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 			//The packet net_speeder sent. nothing todo
 		}
 		// count = 0;
-	}else{
-		count = 0;
-	}
+	// }else{
+		// count = 0;
+	// }
 	return;
 }
 
