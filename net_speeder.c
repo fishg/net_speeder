@@ -38,23 +38,25 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	static int count = 0;                  
 	struct libnet_ipv4_hdr *ip;              
 	count++;
-	// if( count%5 ==0){
-	libnet_t *libnet_handler = (libnet_t *)args;
-	
-	ip = (struct libnet_ipv4_hdr*)(packet + ETHERNET_H_LEN);
+	if( count%3 !=0){
+		libnet_t *libnet_handler = (libnet_t *)args;
+		
+		ip = (struct libnet_ipv4_hdr*)(packet + ETHERNET_H_LEN);
 
-	if(ip->ip_ttl != SPECIAL_TTL) {
-		ip->ip_ttl = SPECIAL_TTL;
-		int len_written = libnet_adv_write_raw_ipv4(libnet_handler, (u_int8_t *)ip, ntohs(ip->ip_len));
-		if(len_written < 0) {
-			printf("packet len:[%d] actual write:[%d]\n", ntohs(ip->ip_len), len_written);
-			printf("err msg:[%s]\n", libnet_geterror(libnet_handler));
+		if(ip->ip_ttl != SPECIAL_TTL) {
+			ip->ip_ttl = SPECIAL_TTL;
+			int len_written = libnet_adv_write_raw_ipv4(libnet_handler, (u_int8_t *)ip, ntohs(ip->ip_len));
+			if(len_written < 0) {
+				printf("packet len:[%d] actual write:[%d]\n", ntohs(ip->ip_len), len_written);
+				printf("err msg:[%s]\n", libnet_geterror(libnet_handler));
+			}
+		} else {
+			//The packet net_speeder sent. nothing todo
 		}
-	} else {
-		//The packet net_speeder sent. nothing todo
+		// count = 0;
+	}else{
+		count = 0;
 	}
-	// count = 0;
-	// }
 	return;
 }
 
